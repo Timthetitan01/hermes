@@ -1,1576 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hermes | High School Sports Hub</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-  /* ==========================================================================
-     Theme: Hermes Modern UI (Maroon, Gold, Dark Gray, White)
-     ========================================================================== */
-  :root {
-    /* Colors */
-    --gold: #e6a800;
-    --gold-light: #ffc107;
-    --maroon: #7b1625;
-    --maroon-light: #9e1f32;
-    
-    --bg-base: #0a0a0c;
-    --bg-surface: #141419;
-    --bg-surface-hover: #1c1c24;
-    
-    --border-light: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.15);
-    
-    --text-main: #ffffff;
-    --text-muted: #9494a0;
-    
-    /* Fonts */
-    --font-ui: 'Inter', sans-serif;
-    --font-display: 'Oswald', sans-serif;
-    
-    --radius-card: 16px;
-    --radius-sm: 8px;
-    --transition: all 0.3s ease;
-    --shadow-subtle: 0 8px 32px rgba(0, 0, 0, 0.4);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg-base);
-    color: var(--text-main);
-    font-family: var(--font-ui);
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.5;
-  }
-
-  a { text-decoration: none; color: inherit; transition: var(--transition); }
-
-  /* ── GLOBAL TICKER ── */
-  .ticker {
-    background: var(--bg-surface);
-    border-bottom: 1px solid var(--border-light);
-    padding: 8px 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .ticker-inner {
-    display: inline-block;
-    animation: ticker 35s linear infinite;
-    padding-left: 100%;
-  }
-
-  @keyframes ticker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-  }
-
-  .ticker-item {
-    display: inline-block;
-    margin: 0 2.5rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .ticker-item i { color: var(--gold); margin-right: 6px; }
-  .ticker-item .score-w { color: var(--text-main); font-weight: 700; }
-
-  /* ── HEADER ── */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(10, 10, 12, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-light);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 70px;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .logo i {
-    font-size: 1.5rem;
-    color: var(--gold);
-  }
-
-  .logo-text {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .logo-hermes {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-main);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .logo-sub {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding-left: 0.5rem;
-    border-left: 1px solid var(--border-strong);
-  }
-
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  nav a {
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 0.5rem 0;
-    position: relative;
-  }
-
-  nav a:hover { color: var(--text-main); }
-  nav a.active { color: var(--gold); }
-
-  /* ── LIVE NOW MARQUEE ── */
-  .live-marquee {
-    display: block;
-    background: var(--maroon);
-    color: var(--text-main);
-    padding: 0.6rem 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-decoration: none;
-    transition: var(--transition);
-  }
-
-  .live-marquee:hover {
-    background: var(--maroon-light);
-  }
-
-  .live-marquee-inner {
-    display: inline-block;
-    animation: ticker 25s linear infinite;
-    padding-left: 100%;
-  }
-
-  .live-marquee-item {
-    display: inline-block;
-    margin-right: 4rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .live-marquee-item i {
-    color: var(--gold-light);
-    margin-right: 8px;
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* ── MAIN LAYOUT (HERO GRID) ── */
-  .main-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2.5rem 2rem;
-  }
-
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 2rem;
-    align-items: start;
-  }
-
-  /* ── UI CARDS BASE ── */
-  .card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-card);
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .card:hover {
-    background: var(--bg-surface-hover);
-    border-color: var(--border-strong);
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-subtle);
-  }
-
-  /* ── HERO LIVE GAME CARD ── */
-  .hero-live-game {
-    position: relative;
-    overflow: hidden;
-    border-color: var(--gold);
-    cursor: pointer;
-  }
-
-  .hero-live-game .card-glow {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    box-shadow: inset 0 0 40px rgba(230, 168, 0, 0.1);
-    pointer-events: none;
-    border-radius: var(--radius-card);
-  }
-
-  .live-banner {
-    border-bottom: 1px solid var(--border-light);
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .live-badge {
-    background: var(--maroon);
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .live-badge i {
-    font-size: 0.4rem;
-    animation: pulse 1.5s infinite;
-  }
-
-  .game-period {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .scoreboard {
-    padding: 2.5rem 2rem;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .team {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .team-abbr {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-main);
-  }
-
-  .team-name {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .score-display {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .score {
-    font-family: var(--font-display);
-    font-size: 4rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  .score.home { color: var(--gold); }
-  .score.away { color: var(--text-muted); }
-
-  .score-sep {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    color: var(--border-strong);
-  }
-
-  .game-meta {
-    padding: 0 2rem 2rem;
-    display: flex;
-    gap: 1rem;
-  }
-
-  .game-meta-item {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: var(--radius-sm);
-    padding: 1rem;
-    text-align: center;
-    border: 1px solid var(--border-light);
-  }
-
-  .game-meta-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-  }
-
-  .game-meta-value {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-main);
-  }
-
-  /* ── QUICK STATS ── */
-  .quick-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .stat-card {
-    padding: 1.5rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-value {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-main);
-    line-height: 1.2;
-  }
-
-  .stat-sub {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-top: 0.25rem;
-  }
-
-  /* ── SIDEBAR PANELS ── */
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .panel-header {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .panel-title {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: var(--text-main);
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .panel-title i {
-    color: var(--maroon);
-  }
-
-  .panel-link {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--gold);
-    text-transform: uppercase;
-  }
-
-  /* Schedule Item */
-  .schedule-item {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .schedule-item:last-child { border-bottom: none; }
-
-  .sched-date {
-    text-align: center;
-    width: 45px;
-    flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 6px;
-    padding: 0.4rem 0;
-  }
-
-  .sched-date .month {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    display: block;
-  }
-
-  .sched-date .day {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-main);
-    line-height: 1.1;
-  }
-
-  .sched-info { flex: 1; }
-  .sched-opponent {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text-main);
-  }
-  .sched-details {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
-
-  .sched-result {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-align: right;
-  }
-  .result-live { color: var(--maroon); animation: pulse 1.5s infinite; }
-  .result-upcoming { color: var(--text-muted); font-family: var(--font-ui); font-size: 0.8rem;}
-
-  /* Leader Item */
-  .leader-item {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .leader-item:last-child { border-bottom: none; }
-  
-  .leader-rank {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    width: 20px;
-    text-align: center;
-  }
-  .leader-rank.gold { color: var(--gold); }
-  
-  .leader-info { flex: 1; }
-  .leader-name { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
-  .leader-sport { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-  
-  .leader-stat {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-main);
-    text-align: right;
-  }
-  .leader-stat-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    text-align: right;
-  }
-
-  /* ── ENHANCED RECORDS STRIP ── */
-  .records-section {
-    margin: 3.5rem 0;
-  }
-
-  .records-strip-container {
-    background: linear-gradient(90deg, var(--bg-surface) 0%, rgba(20, 20, 25, 0.8) 100%);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-card);
-    padding: 1.5rem 0;
-    position: relative;
-    box-shadow: var(--shadow-subtle);
-  }
-
-  .records-strip-container::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: var(--gold);
-    border-radius: var(--radius-card) 0 0 var(--radius-card);
-  }
-
-  .records-strip {
-    display: flex;
-    gap: 2.5rem;
-    overflow-x: auto;
-    padding: 0 2.5rem;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-  }
-  
-  .records-strip::-webkit-scrollbar { 
-    display: none; /* Chrome/Safari */
-  }
-
-  .record-item {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    padding-right: 2.5rem;
-    border-right: 1px solid var(--border-light);
-    transition: var(--transition);
-  }
-
-  .record-item:last-child {
-    border-right: none;
-    padding-right: 0;
-  }
-
-  .record-item:hover .record-icon {
-    background: var(--maroon);
-    color: var(--text-main);
-    transform: scale(1.05);
-    border-color: var(--maroon-light);
-  }
-
-  .record-icon {
-    width: 54px; 
-    height: 54px;
-    background: rgba(230, 168, 0, 0.08);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    color: var(--gold);
-    transition: var(--transition);
-    border: 1px solid rgba(230, 168, 0, 0.2);
-  }
-
-  .record-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .record-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.2rem;
-  }
-
-  .record-stat {
-    font-family: var(--font-display);
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text-main);
-    line-height: 1.1;
-    display: flex;
-    align-items: baseline;
-    gap: 0.3rem;
-  }
-
-  .record-stat .unit {
-    font-family: var(--font-ui);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--gold);
-  }
-
-  .record-holder {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin-top: 0.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .record-holder i {
-    font-size: 0.7rem;
-    color: var(--gold);
-    opacity: 0.8;
-  }
-
-  /* ── SECTIONED GAMES (BASKETBALL, VOLLEYBALL, ETC) ── */
-  .sport-section {
-    margin-bottom: 3rem;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--border-light);
-  }
-
-  .section-title {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: var(--text-main);
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-  }
-  
-  .section-title i {
-    color: var(--gold);
-    margin-right: 0.5rem;
-  }
-
-  .games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
-  }
-
-  /* Grid Card Layout */
-  .games-grid .card {
-    padding: 1.5rem;
-  }
-
-  .games-grid .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .games-grid .matchup {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .games-grid .matchup-team {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .games-grid .team-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .games-grid .grid-team-abbr {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-main);
-    width: 36px;
-  }
-
-  .games-grid .grid-team-name {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-muted);
-  }
-
-  .games-grid .grid-score {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    line-height: 1;
-  }
-
-  .games-grid .winning-score {
-    color: var(--gold);
-  }
-
-  .games-grid .divider {
-    height: 1px;
-    background: var(--border-light);
-    width: 100%;
-  }
-
-  .games-grid .card-footer {
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-light);
-  }
-
-  .games-grid .card-footer i { 
-    margin-right: 0.4rem; 
-    color: var(--text-muted);
-  }
-
-  .watch-link {
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .watch-link:hover {
-    color: var(--gold);
-  }
-
-  /* Live Match Card Styling */
-  .grid-live-card {
-    border-color: rgba(230, 168, 0, 0.4);
-    background: linear-gradient(180deg, rgba(230, 168, 0, 0.05) 0%, transparent 100%);
-  }
-  
-  .grid-live-card .grid-team-name { color: var(--text-main); }
-
-  /* Muted / Upcoming Card Styling */
-  .muted-card {
-    background: rgba(20, 20, 25, 0.4);
-    border-color: rgba(255, 255, 255, 0.03);
-    opacity: 0.75;
-  }
-
-  .muted-card .grid-team-abbr,
-  .muted-card .grid-team-name,
-  .muted-card .card-header span,
-  .muted-card .card-footer span,
-  .muted-card .card-footer i {
-    color: rgba(148, 148, 160, 0.6);
-  }
-
-  .muted-card:hover {
-    background: var(--bg-surface-hover);
-    border-color: var(--border-strong);
-    opacity: 1;
-  }
-
-  .muted-card:hover .grid-team-abbr {
-    color: var(--text-main);
-  }
-
-  .muted-card:hover .grid-team-name,
-  .muted-card:hover .card-header span,
-  .muted-card:hover .card-footer span,
-  .muted-card:hover .card-footer i {
-    color: var(--text-muted);
-  }
-
-  /* ==========================================================================
-     COURT VISION FULLSCREEN OVERLAY
-     ========================================================================== */
-  .court-vision-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--bg-base);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-    font-family: var(--font-ui);
-  }
-
-  .court-vision-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* Header */
-  .cv-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid var(--border-light);
-    background: rgba(10, 10, 12, 0.9);
-  }
-
-  .cv-title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-main);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  .cv-title i { color: var(--gold); }
-  .cv-live-badge {
-    background: var(--maroon);
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-family: var(--font-ui);
-    letter-spacing: 0.05em;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .cv-live-badge i { font-size: 0.4rem; animation: pulse 1.5s infinite; color: white;}
-
-  .cv-close {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: var(--transition);
-  }
-  .cv-close:hover { color: var(--text-main); }
-
-  /* Court Container */
-  .cv-court-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background: radial-gradient(circle at center, var(--bg-surface) 0%, var(--bg-base) 100%);
-    overflow: hidden;
-  }
-
-  /* Court Wrapper Locks aspect ratio for exact alignment */
-  .cv-court-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    aspect-ratio: 94 / 50; /* Exact ratio of the SVG viewBox */
-    filter: drop-shadow(0 0 30px rgba(0,0,0,0.5));
-  }
-
-  /* SVG Vector Court */
-  .cv-svg-court {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .court-bg { fill: #101014; }
-  .court-line { stroke: rgba(255, 255, 255, 0.15); stroke-width: 0.3; fill: none; }
-  .court-paint { fill: rgba(123, 22, 37, 0.15); }
-  .court-hoop { stroke: #e74c3c; stroke-width: 0.4; fill: none; }
-  .court-backboard { stroke: var(--text-main); stroke-width: 0.6; }
-
-  /* HTML Overlay (Matches wrapper perfectly) */
-  .cv-html-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-  }
-
-  /* Shot Arc Animation */
-  .shot-arc {
-    fill: none;
-    stroke: var(--gold);
-    stroke-width: 0.5;
-    stroke-linecap: round;
-    stroke-dasharray: 100;
-    stroke-dashoffset: 100;
-    animation: drawArc 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-  }
-  .shot-arc.miss { stroke: var(--text-muted); }
-
-  @keyframes drawArc {
-    to { stroke-dashoffset: 0; }
-  }
-
-  /* Location Ping */
-  .shot-ping {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    width: 12px;
-    height: 12px;
-    background: var(--gold);
-    border-radius: 50%;
-    box-shadow: 0 0 15px var(--gold);
-    opacity: 0;
-    animation: pingAppear 0.3s ease forwards;
-  }
-  .shot-ping::after {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    border: 2px solid var(--gold);
-    border-radius: 50%;
-    animation: pingRipple 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
-  }
-
-  @keyframes pingAppear {
-    from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  }
-  @keyframes pingRipple {
-    0% { transform: scale(0.5); opacity: 1; }
-    100% { transform: scale(2.5); opacity: 0; }
-  }
-
-  /* Player Info Box */
-  .shot-info-box {
-    position: absolute;
-    transform: translate(-50%, -120%);
-    background: rgba(20, 20, 25, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-strong);
-    border-left: 3px solid var(--gold);
-    border-radius: 6px;
-    padding: 1rem;
-    min-width: 200px;
-    box-shadow: var(--shadow-subtle);
-    opacity: 0;
-    pointer-events: none;
-    animation: boxSlideUp 0.4s 0.2s ease forwards;
-    z-index: 10;
-  }
-
-  .shot-info-box.miss { border-left-color: var(--text-muted); }
-
-  @keyframes boxSlideUp {
-    from { opacity: 0; transform: translate(-50%, -100%); }
-    to { opacity: 1; transform: translate(-50%, -120%); }
-  }
-
-  .info-player {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-main);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.2rem;
-  }
-  .info-desc {
-    font-size: 0.8rem;
-    color: var(--gold);
-    font-weight: 600;
-  }
-  .shot-info-box.miss .info-desc { color: var(--text-muted); }
-  
-  .info-meta {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid var(--border-light);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* Simulator Button (For Demo) */
-  .simulator-btn {
-    position: absolute;
-    bottom: 2rem; right: 2rem;
-    background: var(--maroon);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(123, 22, 37, 0.4);
-    z-index: 100;
-  }
-  .simulator-btn:hover { background: var(--maroon-light); transform: translateY(-2px); }
-
-  @media (max-width: 1000px) {
-    .hero-grid { grid-template-columns: 1fr; }
-    nav { display: none; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DELPHI | Pella Christian Athletics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<header>
-  <a class="logo" href="#">
-    <i class="fa-solid fa-bolt"></i>
-    <div class="logo-text">
-      <span class="logo-hermes">Hermes</span>
-      <span class="logo-sub">Sports Hub</span>
-    </div>
-  </a>
-
-  <nav>
-    <a href="#" class="active">Home</a>
-    <a href="#">Basketball</a>
-    <a href="#">Volleyball</a>
-    <a href="#">Football</a>
-    <a href="#">Soccer</a>
-    <a href="#">Baseball</a>
-  </nav>
-</header>
-
-<a href="https://www.youtube.com/watch?v=XsQdpz4rotA" target="_blank" class="live-marquee">
-  <div class="live-marquee-inner">
-    <span class="live-marquee-item"><i class="fa-solid fa-circle"></i> LIVE NOW: Boys Varsity Basketball vs DCG — 4th Qtr — Click to Watch</span>
-    <span class="live-marquee-item"><i class="fa-solid fa-circle"></i> LIVE NOW: Girls Varsity Volleyball vs PEL — Set 3 — Click to Watch</span>
-    <span class="live-marquee-item"><i class="fa-solid fa-circle"></i> LIVE NOW: Boys Varsity Basketball vs DCG — 4th Qtr — Click to Watch</span>
-    <span class="live-marquee-item"><i class="fa-solid fa-circle"></i> LIVE NOW: Girls Varsity Volleyball vs PEL — Set 3 — Click to Watch</span>
-  </div>
-</a>
-
-<main class="main-container">
-  <div class="hero-grid">
-
-    <div>
-      <div class="card hero-live-game" onclick="toggleCourtVision()">
-        <div class="card-glow"></div>
-        <div class="live-banner">
-          <span class="live-badge"><i class="fa-solid fa-circle"></i> LIVE</span>
-          <div class="game-period">4th Qtr &bull; 2:15</div>
-        </div>
-        <div class="scoreboard">
-          <div class="team">
-            <div class="team-abbr">PC</div>
-            <div class="team-name">Eagles</div>
-          </div>
-          <div class="score-display">
-            <div class="score home">68</div>
-            <div class="score-sep">-</div>
-            <div class="score away">62</div>
-          </div>
-          <div class="team">
-            <div class="team-abbr">DCG</div>
-            <div class="team-name">Mustangs</div>
-          </div>
-        </div>
-        <div class="game-meta">
-          <div class="game-meta-item">
-            <div class="game-meta-label">Matchup</div>
-            <div class="game-meta-value">Varsity Boys</div>
-          </div>
-          <div class="game-meta-item">
-            <div class="game-meta-label">Location</div>
-            <div class="game-meta-value">Home Arena</div>
-          </div>
-          <div class="game-meta-item">
-            <div class="game-meta-label">Top Scorer</div>
-            <div class="game-meta-value" style="color:var(--gold)">Rivera (22)</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="quick-stats">
-        <div class="card stat-card">
-          <div class="stat-label">Season Record</div>
-          <div class="stat-value" style="color: var(--gold);">14-3</div>
-          <div class="stat-sub">Boys Basketball</div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-label">Avg Points</div>
-          <div class="stat-value">63.4</div>
-          <div class="stat-sub">Per Game</div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-label">Next Up</div>
-          <div class="stat-value">TMRW</div>
-          <div class="stat-sub">Varsity Girls @ OSK</div>
-        </div>
-      </div>
+    <div class="score-ticker-container">
+        <div class="score-ticker" id="global-ticker">
+            </div>
     </div>
 
-    <div class="sidebar">
-      <div class="card panel">
-        <div class="panel-header">
-          <span class="panel-title"><i class="fa-regular fa-calendar"></i> Schedule</span>
-          <a href="#" class="panel-link">Full List</a>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <i class="fa-solid fa-eagle"></i>
+                <span>DELPHI</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Live <span class="live-dot"></span></a></li>
+                <li><a href="#">Teams</a></li>
+                <li><a href="#">Schedule</a></li>
+                <li><a href="#">Stats</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Search teams, players...">
+                </div>
+                <button class="profile-btn"><i class="fa-solid fa-user"></i></button>
+            </div>
+            <button class="mobile-menu-toggle"><i class="fa-solid fa-bars"></i></button>
         </div>
+    </nav>
+
+    <main class="main-container">
         
-        <div class="schedule-item">
-          <div class="sched-date"><span class="month">Mar</span><span class="day">13</span></div>
-          <div class="sched-info">
-            <div class="sched-opponent">DCG Mustangs</div>
-            <div class="sched-details">Boys Basketball &bull; Home</div>
-          </div>
-          <div class="sched-result result-live">LIVE</div>
+        <section class="hero-section glass-panel">
+            <div class="hero-content">
+                <span class="badge live-badge"><span class="pulse"></span> LIVE NOW</span>
+                <h1>STATE CHAMPIONSHIP REGIONAL</h1>
+                <p>Pella Christian vs. Oskaloosa • 4th Quarter Thriller</p>
+                <button class="btn btn-primary">Watch Stream <i class="fa-solid fa-play"></i></button>
+            </div>
+            <div class="hero-overlay"></div>
+        </section>
+
+        <div class="dashboard-layout">
+            
+            <section class="gamecast-panel glass-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-basketball"></i> Gamecast</h2>
+                    <span class="status-text">Q4 • <span id="game-clock">02:14</span></span>
+                </div>
+                
+                <div class="scoreboard">
+                    <div class="team home-team">
+                        <img src="https://ui-avatars.com/api/?name=PC&background=800000&color=fff&rounded=true&bold=true" alt="Pella Christian">
+                        <div class="team-info">
+                            <span class="team-name">Eagles</span>
+                            <span class="team-record">(18-3)</span>
+                        </div>
+                        <div class="score" id="score-home">68</div>
+                    </div>
+                    <div class="game-status-center">
+                        <div class="possession-arrow" id="possession-indicator"><i class="fa-solid fa-caret-left"></i></div>
+                        <div class="period">4TH</div>
+                    </div>
+                    <div class="team away-team">
+                        <div class="score" id="score-away">65</div>
+                        <div class="team-info right-align">
+                            <span class="team-name">Indians</span>
+                            <span class="team-record">(15-6)</span>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=OSK&background=222&color=fff&rounded=true&bold=true" alt="Oskaloosa">
+                    </div>
+                </div>
+
+                <div class="match-stats">
+                    <div class="stat-row">
+                        <span class="stat-val" id="stat-fg-home">45%</span>
+                        <span class="stat-label">FG%</span>
+                        <span class="stat-val" id="stat-fg-away">41%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-val" id="stat-3pt-home">38%</span>
+                        <span class="stat-label">3PT%</span>
+                        <span class="stat-val" id="stat-3pt-away">33%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-val" id="stat-reb-home">32</span>
+                        <span class="stat-label">REB</span>
+                        <span class="stat-val" id="stat-reb-away">28</span>
+                    </div>
+                </div>
+
+                <div class="play-by-play-container">
+                    <div class="pbp-header">
+                        <h3>Play-by-Play</h3>
+                        <div class="pbp-filters">
+                            <button class="active">All</button>
+                            <button>Scoring</button>
+                            <button>Highlights</button>
+                        </div>
+                    </div>
+                    <ul class="pbp-feed" id="pbp-feed">
+                        </ul>
+                </div>
+            </section>
+
+            <section class="news-panel">
+                <div class="panel-header">
+                    <h2>Top Stories</h2>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <div class="news-grid" id="news-container">
+                    </div>
+
+                <div class="panel-header" style="margin-top: 2rem;">
+                    <h2>Video Highlights</h2>
+                </div>
+                <div class="highlight-card glass-panel">
+                    <div class="video-placeholder">
+                        <i class="fa-solid fa-play-circle play-icon"></i>
+                        <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Highlight">
+                        <span class="duration">01:24</span>
+                    </div>
+                    <div class="highlight-info">
+                        <h4>Monster Dunk by J. Van Gorp seals the 3rd Quarter</h4>
+                        <span class="timestamp">2 hours ago</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="sidebar-panel">
+                <div class="glass-panel trending-panel">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-fire"></i> Trending Players</h2>
+                    </div>
+                    <ul class="trending-list" id="trending-container">
+                        </ul>
+                </div>
+
+                <div class="glass-panel standings-panel" style="margin-top: 1.5rem;">
+                    <div class="panel-header">
+                        <h2>Conference Standings</h2>
+                        <select class="sport-select">
+                            <option>Boys Basketball</option>
+                            <option>Girls Basketball</option>
+                        </select>
+                    </div>
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th>Team</th>
+                                <th>W</th>
+                                <th>L</th>
+                                <th>PCT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standings-body">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
         </div>
-
-        <div class="schedule-item">
-          <div class="sched-date"><span class="month">Mar</span><span class="day">14</span></div>
-          <div class="sched-info">
-            <div class="sched-opponent">OSK Indians</div>
-            <div class="sched-details">Girls Basketball &bull; Away</div>
-          </div>
-          <div class="sched-result result-upcoming">6:00 PM</div>
-        </div>
-
-        <div class="schedule-item">
-          <div class="sched-date"><span class="month">Mar</span><span class="day">16</span></div>
-          <div class="sched-info">
-            <div class="sched-opponent">PEL Dutch</div>
-            <div class="sched-details">JV Basketball &bull; Home</div>
-          </div>
-          <div class="sched-result result-upcoming">4:30 PM</div>
-        </div>
-      </div>
-
-      <div class="card panel">
-        <div class="panel-header">
-          <span class="panel-title"><i class="fa-solid fa-medal"></i> Team Leaders</span>
-          <a href="#" class="panel-link">All Stats</a>
-        </div>
-        
-        <div class="leader-item">
-          <div class="leader-rank gold">1</div>
-          <div class="leader-info">
-            <div class="leader-name">T. Rivera</div>
-            <div class="leader-sport">Varsity Basketball</div>
-          </div>
-          <div>
-            <div class="leader-stat">22.4</div>
-            <div class="leader-stat-label">PPG</div>
-          </div>
-        </div>
-
-        <div class="leader-item">
-          <div class="leader-rank">2</div>
-          <div class="leader-info">
-            <div class="leader-name">S. Mitchell</div>
-            <div class="leader-sport">Varsity Volleyball</div>
-          </div>
-          <div>
-            <div class="leader-stat">14.1</div>
-            <div class="leader-stat-label">Kills/G</div>
-          </div>
-        </div>
-        
-        <div class="leader-item">
-          <div class="leader-rank">3</div>
-          <div class="leader-info">
-            <div class="leader-name">A. Murphy</div>
-            <div class="leader-sport">Varsity Baseball</div>
-          </div>
-          <div>
-            <div class="leader-stat">.412</div>
-            <div class="leader-stat-label">AVG</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="records-section">
-    <div class="section-header">
-      <h2 class="section-title"><i class="fa-solid fa-trophy"></i> Hall of Records</h2>
-    </div>
-    
-    <div class="records-strip-container">
-      <div class="records-strip">
-        
-        <div class="record-item">
-          <div class="record-icon"><i class="fa-solid fa-basketball"></i></div>
-          <div class="record-info">
-            <span class="record-label">All-Time Scoring</span>
-            <span class="record-stat">42 <span class="unit">pts</span></span>
-            <span class="record-holder"><i class="fa-solid fa-user"></i> M. Johnson '19</span>
-          </div>
-        </div>
-
-        <div class="record-item">
-          <div class="record-icon"><i class="fa-solid fa-baseball-bat-ball"></i></div>
-          <div class="record-info">
-            <span class="record-label">Season ERA</span>
-            <span class="record-stat">0.84</span>
-            <span class="record-holder"><i class="fa-solid fa-user"></i> P. Chen '22</span>
-          </div>
-        </div>
-
-        <div class="record-item">
-          <div class="record-icon"><i class="fa-solid fa-person-running"></i></div>
-          <div class="record-info">
-            <span class="record-label">Mile Run Record</span>
-            <span class="record-stat">4:21</span>
-            <span class="record-holder"><i class="fa-solid fa-user"></i> D. Torres '20</span>
-          </div>
-        </div>
-
-        <div class="record-item">
-          <div class="record-icon"><i class="fa-solid fa-futbol"></i></div>
-          <div class="record-info">
-            <span class="record-label">Goals In Season</span>
-            <span class="record-stat">24 <span class="unit">goals</span></span>
-            <span class="record-holder"><i class="fa-solid fa-user"></i> R. Kim '23</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <section class="sport-section" id="basketball">
-      <div class="section-header">
-          <h2 class="section-title"><i class="fa-solid fa-basketball"></i> Boys & Girls Basketball</h2>
-      </div>
-      
-      <div class="games-grid">
-          <article class="card grid-live-card">
-              <div class="card-header">
-                  <span>Varsity Boys</span>
-                  <span class="live-badge"><i class="fa-solid fa-circle"></i> 4th Qtr</span>
-              </div>
-              <div class="matchup">
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">PC</span>
-                          <span class="grid-team-name">Eagles</span>
-                      </div>
-                      <span class="grid-score winning-score">68</span>
-                  </div>
-                  <div class="divider"></div>
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">DCG</span>
-                          <span class="grid-team-name">Mustangs</span>
-                      </div>
-                      <span class="grid-score">62</span>
-                  </div>
-              </div>
-              <div class="card-footer">
-                  <span><i class="fa-solid fa-location-dot"></i> Home</span>
-                  <a href="#" onclick="toggleCourtVision(); return false;" class="watch-link">Court Vision <i class="fa-solid fa-satellite-dish"></i></a>
-              </div>
-          </article>
-
-          <article class="card muted-card">
-              <div class="card-header">
-                  <span>Varsity Girls</span>
-                  <span>Tomorrow</span>
-              </div>
-              <div class="matchup">
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">PC</span>
-                          <span class="grid-team-name">Eagles</span>
-                      </div>
-                      <span class="grid-score">-</span>
-                  </div>
-                  <div class="divider"></div>
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">OSK</span>
-                          <span class="grid-team-name">Indians</span>
-                      </div>
-                      <span class="grid-score">-</span>
-                  </div>
-              </div>
-              <div class="card-footer">
-                  <span><i class="fa-regular fa-clock"></i> 6:00 PM</span>
-                  <span><i class="fa-solid fa-location-dot"></i> Away</span>
-              </div>
-          </article>
-          
-          <article class="card muted-card">
-              <div class="card-header">
-                  <span>JV Boys</span>
-                  <span>Mar 16</span>
-              </div>
-              <div class="matchup">
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">PC</span>
-                          <span class="grid-team-name">Eagles</span>
-                      </div>
-                      <span class="grid-score">-</span>
-                  </div>
-                  <div class="divider"></div>
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">PEL</span>
-                          <span class="grid-team-name">Dutch</span>
-                      </div>
-                      <span class="grid-score">-</span>
-                  </div>
-              </div>
-              <div class="card-footer">
-                  <span><i class="fa-regular fa-clock"></i> 4:30 PM</span>
-                  <span><i class="fa-solid fa-location-dot"></i> Home</span>
-              </div>
-          </article>
-      </div>
-  </section>
-
-  <section class="sport-section" id="volleyball">
-      <div class="section-header">
-          <h2 class="section-title"><i class="fa-solid fa-volleyball"></i> Girls Volleyball</h2>
-      </div>
-      
-      <div class="games-grid">
-          <article class="card grid-live-card">
-              <div class="card-header">
-                  <span>Varsity</span>
-                  <span class="live-badge"><i class="fa-solid fa-circle"></i> Set 3</span>
-              </div>
-              <div class="matchup">
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">PC</span>
-                          <span class="grid-team-name">Eagles</span>
-                      </div>
-                      <span class="grid-score">1</span>
-                  </div>
-                  <div class="divider"></div>
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">PEL</span>
-                          <span class="grid-team-name">Dutch</span>
-                      </div>
-                      <span class="grid-score winning-score">2</span>
-                  </div>
-              </div>
-              <div class="card-footer">
-                  <span><i class="fa-solid fa-location-dot"></i> Away</span>
-                  <a href="#" class="watch-link">Watch Live <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-              </div>
-          </article>
-
-          <article class="card muted-card">
-              <div class="card-header">
-                  <span>JV</span>
-                  <span>Mar 18</span>
-              </div>
-              <div class="matchup">
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">PC</span>
-                          <span class="grid-team-name">Eagles</span>
-                      </div>
-                      <span class="grid-score">-</span>
-                  </div>
-                  <div class="divider"></div>
-                  <div class="matchup-team">
-                      <div class="team-info">
-                          <span class="grid-team-abbr">GRN</span>
-                          <span class="grid-team-name">Grinnell</span>
-                      </div>
-                      <span class="grid-score">-</span>
-                  </div>
-              </div>
-              <div class="card-footer">
-                  <span><i class="fa-regular fa-clock"></i> 5:30 PM</span>
-                  <span><i class="fa-solid fa-location-dot"></i> Home</span>
-              </div>
-          </article>
-      </div>
-  </section>
-
-</main>
-
-<div class="court-vision-overlay" id="cvOverlay">
-  
-  <div class="cv-header">
-    <div class="cv-title">
-      <i class="fa-solid fa-satellite-dish"></i> Hermes Court Vision
-      <span class="cv-live-badge"><i class="fa-solid fa-circle"></i> LIVE TRACKING</span>
-    </div>
-    <div style="font-family: var(--font-display); font-size: 1.5rem; color: var(--text-muted);">
-      <span style="color: var(--text-main);">PC</span> 68 &nbsp;&nbsp;&bull;&nbsp;&nbsp; DCG 62
-    </div>
-    <button class="cv-close" onclick="toggleCourtVision()"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-
-  <div class="cv-court-container" id="cvCourtContainer">
-    
-    <div class="cv-court-wrapper">
-      
-      <svg class="cv-svg-court" viewBox="0 0 94 50" preserveAspectRatio="xMidYMid meet" id="svgCourt">
-        <rect class="court-bg" width="94" height="50" rx="1" />
-        
-        <line class="court-line" x1="47" y1="0" x2="47" y2="50" />
-        <circle class="court-line" cx="47" cy="25" r="6" />
-        <circle class="court-line" cx="47" cy="25" r="2" />
-        
-        <rect class="court-paint" x="0" y="17" width="19" height="16" />
-        <rect class="court-line" x="0" y="17" width="19" height="16" />
-        <circle class="court-line" cx="19" cy="25" r="6" />
-        <path class="court-line" d="M 0,4.25 L 14,4.25 A 23.75,23.75 0 0,0 14,45.75 L 0,45.75" /> <line class="court-backboard" x1="4" y1="22" x2="4" y2="28" />
-        <circle class="court-hoop" cx="5.25" cy="25" r="0.75" />
-
-        <rect class="court-paint" x="75" y="17" width="19" height="16" />
-        <rect class="court-line" x="75" y="17" width="19" height="16" />
-        <circle class="court-line" cx="75" cy="25" r="6" />
-        <path class="court-line" d="M 94,4.25 L 80,4.25 A 23.75,23.75 0 0,1 80,45.75 L 94,45.75" /> <line class="court-backboard" x1="90" y1="22" x2="90" y2="28" />
-        <circle class="court-hoop" cx="88.75" cy="25" r="0.75" />
-
-        <g id="svgArcs"></g>
-      </svg>
-
-      <div id="htmlOverlay" class="cv-html-overlay"></div>
-      
-    </div>
-
-  </div>
-
-  <button class="simulator-btn" onclick="simulateShot()">Simulate Play <i class="fa-solid fa-play"></i></button>
-
-</div>
-
-<script>
-  // Function to open/close the modal
-  function toggleCourtVision() {
-    const overlay = document.getElementById('cvOverlay');
-    overlay.classList.toggle('active');
-  }
-
-  // Simulation Logic
-  const players = [
-    { name: 'T. Rivera', pts: 22, ast: 4 },
-    { name: 'J. Smith', pts: 14, ast: 2 },
-    { name: 'M. Davis', pts: 8, ast: 6 }
-  ];
-  
-  const shotTypes = ['3PT Jumper', 'Driving Layup', 'Mid-Range Pullup', 'Corner 3PT'];
-
-  function simulateShot() {
-    const svgCourt = document.getElementById('svgCourt');
-    const htmlOverlay = document.getElementById('htmlOverlay');
-    const arcLayer = document.getElementById('svgArcs');
-
-    // Clear previous animations to keep it clean
-    htmlOverlay.innerHTML = '';
-    arcLayer.innerHTML = '';
-
-    // Pick random player and shot
-    const player = players[Math.floor(Math.random() * players.length)];
-    const shot = shotTypes[Math.floor(Math.random() * shotTypes.length)];
-    const isMake = Math.random() > 0.3; // 70% chance to make for demo
-    
-    // Generate random coordinate inside court boundaries
-    // X between 5 and 35, Y between 5 and 45. (Within 0-94 / 0-50 bounds)
-    const startX = 5 + (Math.random() * 30);
-    const startY = 5 + (Math.random() * 40);
-    
-    // Target Hoop (Left Hoop coordinates)
-    const endX = 5.25;
-    const endY = 25;
-
-    // Calculate arc control point (Creates a parabola)
-    const controlX = (startX + endX) / 2;
-    const controlY = Math.min(startY, endY) - 15; // Arc height
-
-    // 1. Draw SVG Arc
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const d = `M ${startX},${startY} Q ${controlX},${controlY} ${endX},${endY}`;
-    path.setAttribute('d', d);
-    path.setAttribute('class', isMake ? 'shot-arc' : 'shot-arc miss');
-    
-    // Calculate path length to animate stroke accurately
-    arcLayer.appendChild(path);
-    const length = path.getTotalLength();
-    path.style.strokeDasharray = length;
-    path.style.strokeDashoffset = length;
-
-    // 2. Map SVG Coordinates to HTML Overlay percentages
-    // (Because of cv-court-wrapper, these percentages directly map to the SVG background)
-    const percentX = (startX / 94) * 100;
-    const percentY = (startY / 50) * 100;
-
-    // 3. Create Ping
-    const ping = document.createElement('div');
-    ping.className = 'shot-ping';
-    ping.style.left = `${percentX}%`;
-    ping.style.top = `${percentY}%`;
-    htmlOverlay.appendChild(ping);
-
-    // 4. Create Info Box
-    const box = document.createElement('div');
-    box.className = isMake ? 'shot-info-box' : 'shot-info-box miss';
-    box.style.left = `${percentX}%`;
-    box.style.top = `${percentY}%`;
-    
-    box.innerHTML = `
-      <div class="info-player">${player.name}</div>
-      <div class="info-desc">${isMake ? 'SCORES' : 'MISSES'} - ${shot}</div>
-      <div class="info-meta">
-        <span>Current: ${player.pts + (isMake && shot.includes('3PT') ? 3 : (isMake ? 2 : 0))} PTS</span>
-        <span>${player.ast} AST</span>
-      </div>
-    `;
-    
-    htmlOverlay.appendChild(box);
-  }
-</script>
-
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
